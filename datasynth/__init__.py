@@ -8,6 +8,7 @@ __status__ = "Development"
 import logging
 
 from . import feature
+from . import rct
 
 logging.basicConfig(
     level=logging.INFO,
@@ -16,4 +17,4 @@ logging.basicConfig(
     format="%(name)s - %(levelname)s - %(message)s",
 )
 logger = logging.getLogger("datasynth")
-logger.info("datasynth initialized")
+logger.info("datasynth: initialized.")
