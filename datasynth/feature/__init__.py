@@ -7,6 +7,7 @@ from .beta import BetaDistributionGenerator
 from .binomial import BinomialDistributionGenerator
 from .choice import ChoiceDistributionGenerator
 from .exponential import ExponentialDistributionGenerator
+from .gamma import GammaDistributionGenerator
 from .normal import NormalDistributionGenerator
 from .uniform import UniformDistributionGenerator, UniformIntegerDistributionGenerator
 
