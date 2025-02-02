@@ -15,21 +15,25 @@ class NormalDistributionGenerator(FeatureGenerator):
         self,
         mean: float = 0.0,
         std: float = 1.0,
-        round: Union[int, None] = None,
         ceil: Union[bool, None] = None,
         floor: Union[bool, None] = None,
+        decimals: Union[int, None] = None,
     ):
         """Initializes the generator.
 
         Args:
             mean (float, optional): mean of the normal distribution. Defaults to 0.0.
             std (float, optional): standard deviation of the normal distribution. Defaults to 1.0.
+            ceil (Union[bool, None], optional): whether to ceil the values. Defaults to None.
+            floor (Union[bool, None], optional): whether to floor the values. Defaults to None.
+            decimals (Union[int, None], optional): number of decimal places to round to. Defaults to None.
         """
         self.mean = mean
         self.std = std
-        self.round = round
+
         self.ceil = ceil
         self.floor = floor
+        self.decimals = decimals
 
     def generate(self, n: int, rng: np.random.Generator) -> np.ndarray:
         """Generates n samples of feature via the given random number generator.
@@ -47,7 +51,7 @@ class NormalDistributionGenerator(FeatureGenerator):
             return np.ceil(normal)
         elif self.floor:
             return np.floor(normal)
-        elif self.round:
-            return np.around(normal, decimals=self.round)
+        elif self.decimals:
+            return np.around(normal, decimals=self.decimals)
         else:
             return normal
