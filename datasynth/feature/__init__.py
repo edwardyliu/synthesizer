@@ -3,6 +3,7 @@
 import logging
 
 from .normal import NormalDistributionGenerator
+from .uniform import UniformDistributionGenerator
 
 
 logger = logging.getLogger("datasynth")
