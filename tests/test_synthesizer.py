@@ -13,7 +13,7 @@ def test_synthesizer():
 
     synthesizer = DataSynthesizer(28)
     synthesizer.add_feature("age", UniformIntegerDistributionGenerator(18, 65))
-    synthesizer.add_feature("income", NormalDistributionGenerator(65000, 1.0))
+    synthesizer.add_feature("income", NormalDistributionGenerator(65000, 1.0, round=2))
     synthesizer.add_feature(
         "occupation",
         ChoiceDistributionGenerator(

@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from datasynth.rct import ParallelGenerator
+from datasynth.rct import ParallelRCTGenerator
 
 
 def test_parallel():
@@ -13,10 +13,8 @@ def test_parallel():
         "time": [60, 40, 20],
     }
     n = 100
-    rng = np.random.default_rng(28)
-
-    generator = ParallelGenerator(**treatments)
+    generator = ParallelRCTGenerator(seed=42, **treatments)
     assert len(generator.arms) == len(treatments["discount"]) * len(treatments["time"])
 
-    rct = generator.generate(n, rng)
+    rct = generator.generate(n)
     assert len(rct) == n

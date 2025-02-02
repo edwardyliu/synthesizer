@@ -46,7 +46,7 @@ class DataSynthesizer:
             pd.DataFrame: the generated dataset
         """
 
-        dataset = {sid: np.arange(n)}
+        dataset = {sid: np.arange(start=1, stop=n + 1)}
         for name, generator in self.feature_generators.items():
             dataset[name] = generator.generate(n, self.rng)
 

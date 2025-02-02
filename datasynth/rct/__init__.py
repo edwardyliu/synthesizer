@@ -2,7 +2,7 @@
 
 import logging
 
-from .parallel import ParallelGenerator
+from .parallel import ParallelRCTGenerator
 
 
 logger = logging.getLogger("datasynth")

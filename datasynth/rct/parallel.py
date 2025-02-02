@@ -9,19 +9,21 @@ import pandas as pd
 from .generator import RCTGenerator
 
 
-class ParallelGenerator(RCTGenerator):
+class ParallelRCTGenerator(RCTGenerator):
     """Abstract class for RCT generation."""
 
-    def __init__(self, **kwargs):
+    def __init__(self, seed: int = None, **kwargs):
         """Initializes the generator."""
 
+        self.rng = np.random.default_rng(seed)
+
+        # generate all possible arms
         keys, values = zip(*kwargs.items())
         self.arms = [dict(zip(keys, v)) for v in itertools.product(*values)]
 
     def generate(
         self,
         n: int,
-        rng: np.random.Generator,
         sid: str = "subject_id",
     ) -> pd.DataFrame:
         """Generate a DataFrame consisting columns that define the RCT design.
@@ -35,7 +37,7 @@ class ParallelGenerator(RCTGenerator):
         """
 
         # randomly assign subjects to an arm
-        arm_assignments = rng.integers(low=0, high=len(self.arms), size=n)
+        arm_assignments = self.rng.integers(low=0, high=len(self.arms), size=n)
 
         # create the RCT design DataFrame
         data = {}
