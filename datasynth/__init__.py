@@ -7,8 +7,13 @@ __status__ = "Development"
 
 import logging
 
+# import submodules
 from . import feature
 from . import rct
+
+# import classes
+from .synthesizer import DataSynthesizer
+
 
 logging.basicConfig(
     level=logging.INFO,
