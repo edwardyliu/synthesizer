@@ -1,12 +1,12 @@
-# Test: datasynth/rct/crossover.py
+# Test: synthesizer/rct/crossover.py
 
 import math
 
-from datasynth.rct import CrossoverRCTGenerator
+from synthesizer.rct import CrossoverRCTGenerator
 
 
 def test_crossover():
-    """Test Unit: datasynth.rct.crossover"""
+    """Test Unit: synthesizer.rct.crossover"""
 
     treatments = {
         "discount": ["placebo", "20"],

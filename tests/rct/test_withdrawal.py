@@ -1,12 +1,12 @@
-# Test: datasynth/rct/withdrawal.py
+# Test: synthesizer/rct/withdrawal.py
 
 import pytest
 
-from datasynth.rct import WithdrawalRCTGenerator
+from synthesizer.rct import WithdrawalRCTGenerator
 
 
 def test_withdrawal():
-    """Test Unit: datasynth.rct.withdrawal"""
+    """Test Unit: synthesizer.rct.withdrawal"""
 
     treatments = {
         "discount": ["placebo", "20"],

@@ -1,12 +1,12 @@
-# Test: datasynth/feature/normal.py
+# Test: synthesizer/feature/normal.py
 
 import numpy as np
 
-from datasynth.feature import NormalDistributionGenerator
+from synthesizer.feature import NormalDistributionGenerator
 
 
 def test_normal():
-    """Test Unit: datasynth.feature.normal"""
+    """Test Unit: synthesizer.feature.normal"""
 
     mean = 1.0
     std = 2.0

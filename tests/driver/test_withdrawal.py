@@ -1,12 +1,12 @@
-# Test: datasynth/driver/test_withdrawal.py
+# Test: synthesizer/driver/test_withdrawal.py
 
 import pytest
 
-from datasynth.driver import withdrawal
+from synthesizer.driver import withdrawal
 
 
 @pytest.mark.skip
 def test_main():
-    """Test Unit: datasynth.driver.withdrawal.main"""
+    """Test Unit: synthesizer.driver.withdrawal.main"""
 
     withdrawal.main()

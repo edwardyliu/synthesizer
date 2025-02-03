@@ -1,11 +1,11 @@
-# setup for datasynth
+# setup for synthesizer
 
 from setuptools import setup, find_packages
 
 setup(
-    name="datasynth",
+    name="synthesizer",
     version="1.0.0",
-    packages=find_packages(include=["datasynth", "datasynth.*"]),
+    packages=find_packages(include=["synthesizer", "synthesizer.*"]),
     install_requires=[
         "numpy==2.2.2",
         "pandas==2.2.3",

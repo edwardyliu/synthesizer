@@ -1,1 +1,1 @@
-# Test: datasynth/rct/__init__.py
+# Test: synthesizer/rct/__init__.py

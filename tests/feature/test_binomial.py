@@ -1,14 +1,14 @@
-# Test: datasynth/feature/binomial.py
+# Test: synthesizer/feature/binomial.py
 
 import pytest
 
 import numpy as np
 
-from datasynth.feature import BinomialDistributionGenerator
+from synthesizer.feature import BinomialDistributionGenerator
 
 
 def test_binomial():
-    """Test Unit: datasynth.feature.choice"""
+    """Test Unit: synthesizer.feature.choice"""
 
     trials = 1
     success = 0.5

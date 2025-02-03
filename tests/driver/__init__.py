@@ -1,1 +1,1 @@
-# Test: datasynth/driver/__init__.py
+# Test: synthesizer/driver/__init__.py

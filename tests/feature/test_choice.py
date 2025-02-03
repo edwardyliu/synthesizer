@@ -1,14 +1,14 @@
-# Test: datasynth/feature/choice.py
+# Test: synthesizer/feature/choice.py
 
 import pytest
 
 import numpy as np
 
-from datasynth.feature import ChoiceDistributionGenerator
+from synthesizer.feature import ChoiceDistributionGenerator
 
 
 def test_choice():
-    """Test Unit: datasynth.feature.choice"""
+    """Test Unit: synthesizer.feature.choice"""
 
     categories = ["A", "B", "C"]
     probabilities = [0.4, 0.3, 0.3]

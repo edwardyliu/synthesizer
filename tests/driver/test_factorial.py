@@ -1,12 +1,12 @@
-# Test: datasynth/driver/test_factorial.py
+# Test: synthesizer/driver/test_factorial.py
 
 import pytest
 
-from datasynth.driver import factorial
+from synthesizer.driver import factorial
 
 
 @pytest.mark.skip
 def test_main():
-    """Test Unit: datasynth.driver.factorial.main"""
+    """Test Unit: synthesizer.driver.factorial.main"""
 
     factorial.main()

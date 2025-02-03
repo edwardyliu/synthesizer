@@ -1,14 +1,14 @@
-# Test: datasynth/feature/geometric.py
+# Test: synthesizer/feature/geometric.py
 
 import pytest
 
 import numpy as np
 
-from datasynth.feature import GeometricDistributionGenerator
+from synthesizer.feature import GeometricDistributionGenerator
 
 
 def test_geometric():
-    """Test Unit: datasynth.feature.choice"""
+    """Test Unit: synthesizer.feature.choice"""
 
     success = 0.5
     n = 1000

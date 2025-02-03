@@ -1,10 +1,10 @@
-# Test: datasynth/rct/parallel.py
+# Test: synthesizer/rct/parallel.py
 
-from datasynth.rct import ParallelRCTGenerator
+from synthesizer.rct import ParallelRCTGenerator
 
 
 def test_parallel():
-    """Test Unit: datasynth.rct.parallel"""
+    """Test Unit: synthesizer.rct.parallel"""
 
     treatments = {
         "discount": ["placebo", "20", "40"],

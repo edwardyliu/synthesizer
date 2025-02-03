@@ -1,1 +1,1 @@
-# Test: datasynth/__init__.py
+# Test: synthesizer/__init__.py

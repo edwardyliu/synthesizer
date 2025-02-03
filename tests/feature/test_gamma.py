@@ -1,12 +1,12 @@
-# Test: datasynth/feature/gamma.py
+# Test: synthesizer/feature/gamma.py
 
 import numpy as np
 
-from datasynth.feature import GammaDistributionGenerator
+from synthesizer.feature import GammaDistributionGenerator
 
 
 def test_gamma():
-    """Test Unit: datasynth.feature.gamma"""
+    """Test Unit: synthesizer.feature.gamma"""
 
     shape = 2.0
     scale = 2.0

@@ -1,12 +1,12 @@
-# Test: datasynth/feature/poisson.py
+# Test: synthesizer/feature/poisson.py
 
 import numpy as np
 
-from datasynth.feature import PoissonDistributionGenerator
+from synthesizer.feature import PoissonDistributionGenerator
 
 
 def test_poisson():
-    """Test Unit: datasynth.feature.choice"""
+    """Test Unit: synthesizer.feature.choice"""
 
     events = 5
     n = 1000

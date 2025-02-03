@@ -1,12 +1,12 @@
-# Test: datasynth/feature/logistic.py
+# Test: synthesizer/feature/logistic.py
 
 import numpy as np
 
-from datasynth.feature import LogisticDistributionGenerator
+from synthesizer.feature import LogisticDistributionGenerator
 
 
 def test_logistic():
-    """Test Unit: datasynth.feature.logistic"""
+    """Test Unit: synthesizer.feature.logistic"""
 
     mean = 10.0
     scale = 1.0

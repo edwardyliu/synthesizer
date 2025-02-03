@@ -1,10 +1,10 @@
-# Test: datasynth/rct/factorial.py
+# Test: synthesizer/rct/factorial.py
 
-from datasynth.rct import FactorialRCTGenerator
+from synthesizer.rct import FactorialRCTGenerator
 
 
 def test_factorial():
-    """Test Unit: datasynth.rct.factorial"""
+    """Test Unit: synthesizer.rct.factorial"""
 
     treatments = {
         "discount": ["placebo", "20", "40"],

@@ -1,12 +1,12 @@
-# Test: datasynth/feature/f.py
+# Test: synthesizer/feature/f.py
 
 import numpy as np
 
-from datasynth.feature import FDistributionGenerator
+from synthesizer.feature import FDistributionGenerator
 
 
 def test_f():
-    """Test Unit: datasynth.feature.f"""
+    """Test Unit: synthesizer.feature.f"""
 
     dfnum = 1.0
     dfden = 48.0

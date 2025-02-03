@@ -1,12 +1,12 @@
-# Test: datasynth/feature/uniform.py
+# Test: synthesizer/feature/uniform.py
 
 import numpy as np
 
-from datasynth.feature import UniformDistributionGenerator
+from synthesizer.feature import UniformDistributionGenerator
 
 
 def test_uniform():
-    """Test Unit: datasynth.feature.uniform"""
+    """Test Unit: synthesizer.feature.uniform"""
 
     low = 0.0
     high = 1.0

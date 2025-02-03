@@ -1,12 +1,12 @@
-# Test: datasynth/feature/t.py
+# Test: synthesizer/feature/t.py
 
 import numpy as np
 
-from datasynth.feature import TDistributionGenerator
+from synthesizer.feature import TDistributionGenerator
 
 
 def test_t():
-    """Test Unit: datasynth.feature.t"""
+    """Test Unit: synthesizer.feature.t"""
 
     df = 10.0
     n = 1000

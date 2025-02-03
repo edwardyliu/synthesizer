@@ -1,12 +1,12 @@
-# Test: datasynth/feature/exponential.py
+# Test: synthesizer/feature/exponential.py
 
 import numpy as np
 
-from datasynth.feature import ExponentialDistributionGenerator
+from synthesizer.feature import ExponentialDistributionGenerator
 
 
 def test_exponential():
-    """Test Unit: datasynth.feature.exponential"""
+    """Test Unit: synthesizer.feature.exponential"""
 
     scale = 1.0
     n = 1000

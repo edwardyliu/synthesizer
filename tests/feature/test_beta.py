@@ -1,14 +1,14 @@
-# Test: datasynth/feature/beta.py
+# Test: synthesizer/feature/beta.py
 
 import pytest
 
 import numpy as np
 
-from datasynth.feature import BetaDistributionGenerator
+from synthesizer.feature import BetaDistributionGenerator
 
 
 def test_beta():
-    """Test Unit: datasynth.feature.choice"""
+    """Test Unit: synthesizer.feature.choice"""
 
     a = 2.0
     b = 2.0
