@@ -4,6 +4,7 @@ import logging
 
 from .generator import RCTGenerator
 from .crossover import CrossoverRCTGenerator
+from .factorial import FactorialRCTGenerator
 from .parallel import ParallelRCTGenerator
 
 
