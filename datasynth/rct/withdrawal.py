@@ -1,5 +1,5 @@
-# datasynth/rct/parallel.py
-"""RCT generation: parallel RCT design"""
+# datasynth/rct/withdrawal.py
+"""RCT generation: withdrawal RCT design"""
 
 import numpy as np
 import pandas as pd
@@ -7,13 +7,21 @@ import pandas as pd
 from .generator import RCTGenerator
 
 
-class ParallelRCTGenerator(RCTGenerator):
-    """Class for parallel RCT generation."""
+class WithdrawalRCTGenerator(RCTGenerator):
+    """Class for withdrawal RCT generation."""
 
-    def __init__(self, seed: int = None, **kwargs):
+    def __init__(
+        self,
+        seed: int = None,
+        success: float = 0.3,
+        withdrawal: float = 0.5,
+        **kwargs,
+    ):
         """Initializes the generator."""
 
         self.rng = np.random.default_rng(seed)
+        self.success = success
+        self.withdrawal = withdrawal
 
         # generate all possible arms
         placebo = False
@@ -59,5 +67,21 @@ class ParallelRCTGenerator(RCTGenerator):
             data[sid] = data.get(sid, []) + [idx]
             for key, value in self.arms[assignment].items():
                 data[key] = data.get(key, []) + [value]
+
+        # simulate response
+        responses = self.rng.binomial(n=1, p=self.success, size=n)
+        data["response"] = [True if response == 1 else False for response in responses]
+
+        # simulate withdrawal
+        # randomize responders to continue or to withdraw
+        withdrawals = []
+        for response in responses:
+            if response:
+                withdrawals.append(
+                    True if self.rng.binomial(n=1, p=self.withdrawal) == 1 else False
+                )
+            else:
+                withdrawals.append(None)
+        data["withdrawal"] = withdrawals
 
         return pd.DataFrame(data)
