@@ -2,8 +2,14 @@
 
 ```bash
 python -m venv .venv
+
+# windows
 source .venv/Scripts/activate
-python.exe -m pip install --upgrade pip
+
+# mac
+source .venv/bin/activate
+
+python -m pip install --upgrade pip
 
 # to run:
 pip install -e .
