@@ -8,6 +8,7 @@ from .binomial import BinomialDistributionGenerator
 from .choice import ChoiceDistributionGenerator
 from .exponential import ExponentialDistributionGenerator
 from .gamma import GammaDistributionGenerator
+from .geometric import GeometricDistributionGenerator
 from .normal import NormalDistributionGenerator
 from .uniform import UniformDistributionGenerator, UniformIntegerDistributionGenerator
 
