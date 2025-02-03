@@ -13,6 +13,7 @@ from .geometric import GeometricDistributionGenerator
 from .logistic import LogisticDistributionGenerator
 from .normal import NormalDistributionGenerator
 from .poisson import PoissonDistributionGenerator
+from .t import TDistributionGenerator
 from .uniform import UniformDistributionGenerator, UniformIntegerDistributionGenerator
 
 
