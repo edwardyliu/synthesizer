@@ -1,27 +1,24 @@
-# datasynth/feature/binomial.py
-"""Feature generation: binomial distribution"""
+# datasynth/feature/poisson.py
+"""Feature generation: poisson distribution"""
 
 import numpy as np
 
 from .generator import FeatureGenerator
 
 
-class BinomialDistributionGenerator(FeatureGenerator):
-    """Generates features from a binomial distribution."""
+class PoissonDistributionGenerator(FeatureGenerator):
+    """Generates features from a poisson distribution."""
 
     def __init__(
         self,
-        trials: int = 10,
-        success: float = 0.5,
+        events: int = 10,
     ):
         """Initializes the generator.
 
         Args:
-            trials (int): number of trials. Defaults to 10.
-            success (float): probability of success in each trial. Defaults to 0.5.
+            events (int): expected number of events occurring in a fixed-time interval, must be >= 0. Defaults to 10.
         """
-        self.trials = trials
-        self.success = success
+        self.events = events
 
     def generate(self, n: int, rng: np.random.Generator) -> np.ndarray:
         """Generates n samples of feature via the given random number generator.
@@ -34,4 +31,4 @@ class BinomialDistributionGenerator(FeatureGenerator):
             np.ndarray: the generated feature values
         """
 
-        return rng.binomial(n=self.trials, p=self.success, size=n)
+        return rng.poisson(lam=self.events, size=n)

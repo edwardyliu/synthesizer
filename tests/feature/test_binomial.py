@@ -7,7 +7,7 @@ import numpy as np
 from datasynth.feature import BinomialDistributionGenerator
 
 
-def test_choice():
+def test_binomial():
     """Test Unit: datasynth.feature.choice"""
 
     trials = 1

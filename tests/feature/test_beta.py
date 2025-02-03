@@ -7,7 +7,7 @@ import numpy as np
 from datasynth.feature import BetaDistributionGenerator
 
 
-def test_choice():
+def test_beta():
     """Test Unit: datasynth.feature.choice"""
 
     a = 2.0

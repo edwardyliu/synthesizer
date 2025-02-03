@@ -7,7 +7,7 @@ import numpy as np
 from datasynth.feature import GeometricDistributionGenerator
 
 
-def test_choice():
+def test_geometric():
     """Test Unit: datasynth.feature.choice"""
 
     success = 0.5
