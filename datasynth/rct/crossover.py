@@ -1,5 +1,5 @@
-# datasynth/rct/parallel.py
-"""RCT generation: parallel RCT design"""
+# datasynth/rct/crossover.py
+"""RCT generation: cross-over RCT design"""
 
 import itertools
 
@@ -9,17 +9,27 @@ import pandas as pd
 from .generator import RCTGenerator
 
 
-class ParallelRCTGenerator(RCTGenerator):
+class CrossoverRCTGenerator(RCTGenerator):
     """Abstract class for RCT generation."""
 
-    def __init__(self, seed: int = None, **kwargs):
+    def __init__(self, seed: int = None, nperiods=2, **kwargs):
         """Initializes the generator."""
 
         self.rng = np.random.default_rng(seed)
+        self.nperiods = nperiods
 
         # generate all possible arms
         keys, values = zip(*kwargs.items())
         self.arms = [dict(zip(keys, v)) for v in itertools.product(*values)]
+        self.arm_permutations = list(
+            itertools.permutations(
+                self.arms,
+                min(
+                    self.nperiods,
+                    len(self.arms),
+                ),
+            ),
+        )
 
     def generate(
         self,
@@ -37,14 +47,22 @@ class ParallelRCTGenerator(RCTGenerator):
             pd.DataFrame: the generated RCT design DataFrame
         """
 
-        # randomly assign subjects to an arm
-        arm_assignments = self.rng.integers(low=0, high=len(self.arms), size=n)
+        # randomly assign subjects to an arm permutation
+        arm_permutation_assignments = self.rng.integers(
+            low=0,
+            high=len(self.arm_permutations),
+            size=n,
+        )
 
         # create the RCT design DataFrame
         data = {}
-        for idx, assignment in enumerate(arm_assignments, 1):
+        for idx, assignment in enumerate(arm_permutation_assignments, 1):
             data[sid] = data.get(sid, []) + [idx]
-            for key, value in self.arms[assignment].items():
-                data[key] = data.get(key, []) + [value]
+            for period, arm in enumerate(self.arm_permutations[assignment], 1):
+                for key, value in arm.items():
+                    name = f"{key}_t{period}"
+                    data[name] = data.get(name, []) + [value]
+
+        print(data)
 
         return pd.DataFrame(data)

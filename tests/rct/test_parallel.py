@@ -1,7 +1,5 @@
 # Test: datasynth/rct/parallel.py
 
-import numpy as np
-
 from datasynth.rct import ParallelRCTGenerator
 
 

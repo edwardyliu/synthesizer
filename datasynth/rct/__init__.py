@@ -2,6 +2,8 @@
 
 import logging
 
+from .generator import RCTGenerator
+from .crossover import CrossoverRCTGenerator
 from .parallel import ParallelRCTGenerator
 
 
