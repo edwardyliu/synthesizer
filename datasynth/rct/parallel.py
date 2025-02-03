@@ -10,7 +10,7 @@ from .generator import RCTGenerator
 
 
 class ParallelRCTGenerator(RCTGenerator):
-    """Abstract class for RCT generation."""
+    """Class for parallel RCT generation."""
 
     def __init__(self, seed: int = None, **kwargs):
         """Initializes the generator."""
@@ -18,8 +18,23 @@ class ParallelRCTGenerator(RCTGenerator):
         self.rng = np.random.default_rng(seed)
 
         # generate all possible arms
-        keys, values = zip(*kwargs.items())
-        self.arms = [dict(zip(keys, v)) for v in itertools.product(*values)]
+        placebo = False
+        arms = []
+        for treatment, levels in kwargs.items():
+            for level in levels:
+                arm = {}
+                for name in kwargs.keys():
+                    arm[name] = "placebo" if treatment != name else level
+
+                if all(v == "placebo" for v in arm.values()):
+                    if not placebo:
+                        placebo = True
+                    else:
+                        continue
+
+                arms.append(arm)
+
+        self.arms = arms
 
     def generate(
         self,

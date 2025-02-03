@@ -10,7 +10,7 @@ from .generator import RCTGenerator
 
 
 class CrossoverRCTGenerator(RCTGenerator):
-    """Abstract class for RCT generation."""
+    """Class for cross-over RCT generation."""
 
     def __init__(self, seed: int = None, ncopies=2, **kwargs):
         """Initializes the generator."""
@@ -21,8 +21,8 @@ class CrossoverRCTGenerator(RCTGenerator):
         # generate all possible arms
         keys, values = zip(*kwargs.items())
         self.arms = [dict(zip(keys, v)) for v in itertools.product(*values)]
-        self.arm_permutations = list(
-            itertools.permutations(
+        self.arm_combinations = list(
+            itertools.combinations(
                 self.arms,
                 min(
                     self.ncopies,
@@ -50,14 +50,14 @@ class CrossoverRCTGenerator(RCTGenerator):
         # randomly assign subjects to an arm permutation
         arm_permutation_assignments = self.rng.integers(
             low=0,
-            high=len(self.arm_permutations),
+            high=len(self.arm_combinations),
             size=n,
         )
 
         # create the RCT design DataFrame
         data = {}
         for idx, assignment in enumerate(arm_permutation_assignments, 1):
-            for copy, arm in enumerate(self.arm_permutations[assignment], 1):
+            for copy, arm in enumerate(self.arm_combinations[assignment], 1):
                 data[sid] = data.get(sid, []) + [idx]
                 data["copy"] = data.get("copy", []) + [copy]
                 for key, value in arm.items():

@@ -37,8 +37,8 @@ def main():
 
     # design and generate the RCT
     treatments = {
-        "discount": [0, 20, 40],
-        "time": [60, 40, 20],
+        "discount": ["placebo", "20", "40"],
+        "time": ["placebo", "40", "20"],
     }
     rct = ParallelRCTGenerator(**treatments)
 
