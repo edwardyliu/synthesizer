@@ -9,6 +9,7 @@ from .choice import ChoiceDistributionGenerator
 from .exponential import ExponentialDistributionGenerator
 from .gamma import GammaDistributionGenerator
 from .geometric import GeometricDistributionGenerator
+from .logistic import LogisticDistributionGenerator
 from .normal import NormalDistributionGenerator
 from .uniform import UniformDistributionGenerator, UniformIntegerDistributionGenerator
 
