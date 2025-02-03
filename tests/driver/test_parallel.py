@@ -2,11 +2,11 @@
 
 import pytest
 
-from datasynth.main import main
+from datasynth.driver import parallel
 
 
 @pytest.mark.skip
 def test_main():
     """Test Unit: datasynth.main"""
 
-    main()
+    parallel.main()
