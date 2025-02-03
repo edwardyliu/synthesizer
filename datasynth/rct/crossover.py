@@ -12,11 +12,11 @@ from .generator import RCTGenerator
 class CrossoverRCTGenerator(RCTGenerator):
     """Abstract class for RCT generation."""
 
-    def __init__(self, seed: int = None, nperiods=2, **kwargs):
+    def __init__(self, seed: int = None, ncopies=2, **kwargs):
         """Initializes the generator."""
 
         self.rng = np.random.default_rng(seed)
-        self.nperiods = nperiods
+        self.ncopies = ncopies
 
         # generate all possible arms
         keys, values = zip(*kwargs.items())
@@ -25,7 +25,7 @@ class CrossoverRCTGenerator(RCTGenerator):
             itertools.permutations(
                 self.arms,
                 min(
-                    self.nperiods,
+                    self.ncopies,
                     len(self.arms),
                 ),
             ),
@@ -57,12 +57,10 @@ class CrossoverRCTGenerator(RCTGenerator):
         # create the RCT design DataFrame
         data = {}
         for idx, assignment in enumerate(arm_permutation_assignments, 1):
-            data[sid] = data.get(sid, []) + [idx]
-            for period, arm in enumerate(self.arm_permutations[assignment], 1):
+            for copy, arm in enumerate(self.arm_permutations[assignment], 1):
+                data[sid] = data.get(sid, []) + [idx]
+                data["copy"] = data.get("copy", []) + [copy]
                 for key, value in arm.items():
-                    name = f"{key}_t{period}"
-                    data[name] = data.get(name, []) + [value]
-
-        print(data)
+                    data[key] = data.get(key, []) + [value]
 
         return pd.DataFrame(data)

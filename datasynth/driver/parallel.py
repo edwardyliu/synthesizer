@@ -45,8 +45,10 @@ def main():
     # generate dataset and design for <n> subjects
     n = 100
     dataset = synthesizer.generate(n)
+    dataset.drop(["copy"], axis=1, inplace=True)
     dataset.set_index("subject_id", inplace=True)
     assert len(dataset) == n
+
     design = rct.generate(n)
     design.set_index("subject_id", inplace=True)
     assert len(design) == n

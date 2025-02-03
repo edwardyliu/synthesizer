@@ -18,7 +18,9 @@ def main():
     logger.info("datasynth.driver.crossover.main: generating dataset")
 
     # build data synthesizer
-    synthesizer = DataSynthesizer()
+    copies = 2
+    static = ["age", "occupation"]
+    synthesizer = DataSynthesizer(copies=copies, static=static)
     synthesizer.add_feature("age", UniformIntegerDistributionGenerator(18, 65))
     synthesizer.add_feature(
         "occupation",
@@ -32,12 +34,9 @@ def main():
         ),
     )
     synthesizer.add_feature(
-        "income_t1",
+        "income",
         NormalDistributionGenerator(65000, 1.0, decimals=2),
     )
-    synthesizer.add_feature(
-        "income_t2", NormalDistributionGenerator(66000, 1.0, decimals=2)
-    ),
 
     # design and generate the RCT
     treatments = {
@@ -49,13 +48,14 @@ def main():
     # generate dataset and design for <n> subjects
     n = 100
     dataset = synthesizer.generate(n)
-    dataset.set_index("subject_id", inplace=True)
-    assert len(dataset) == n
-    design = rct.generate(n)
-    design.set_index("subject_id", inplace=True)
-    assert len(design) == n
+    dataset.set_index(["subject_id", "copy"], inplace=True)
+    assert len(dataset) == copies * n
 
-    dataframe = design.join(dataset, on="subject_id")
+    design = rct.generate(n)
+    design.set_index(["subject_id", "copy"], inplace=True)
+    assert len(design) == copies * n
+
+    dataframe = design.join(dataset, on=["subject_id", "copy"])
     dataframe.to_csv("crossover.csv", index=True)
 
 

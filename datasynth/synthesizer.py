@@ -11,41 +11,50 @@ from datasynth.feature import FeatureGenerator
 class DataSynthesizer:
     """Class for dataset generation"""
 
-    def __init__(self, seed: int = None):
+    def __init__(
+        self,
+        seed: int = None,
+        copies: int = 1,
+        static: List[str] = [],
+    ):
         """Initializes the synthesizer with a random seed.
 
         Args:
             seed (int, optional): random seed for reproducibility. Defaults to None.
+            copies (Union[int, None], optional): number of copies per subject. Defaults to 1.
+            static (Union[List[str], str], optional): columns to keep static per subject. Defaults to [].
         """
 
         self.seed = seed
         self.rng = np.random.default_rng(self.seed)
         self.generators: Dict[str, FeatureGenerator] = {}
         self.duplicates: Dict[str, str] = {}
+        self.copies = copies
+        self.static: List[str] = static
 
     def add_feature(
         self,
         name: str,
         generator: Union[FeatureGenerator, None] = None,
-        duplicate: Union[List[str], str, None] = None,
+        duplicates: Union[List[str], str, None] = None,
     ):
         """Adds a feature generator to the synthesizer.
 
         Args:
             name (str): name of the feature
             generator (FeatureGenerator): the feature generator. Defaults to None.
-            duplicate (Union[List[str], str], optional): names of features duplicating this feature. Defaults to None.
+            duplicates (Union[List[str], str], optional): columns to duplicate this feature. Defaults to None.
         """
 
         if generator:
             self.generators[name] = generator
 
-        if duplicate:
-            if isinstance(duplicate, list):
-                for dup in duplicate:
-                    self.duplicates[dup] = name
-            elif isinstance(duplicate, str):
-                self.duplicates[duplicate] = name
+        if duplicates:
+            if isinstance(duplicates, list):
+                for duplicate in duplicates:
+                    self.duplicates[duplicate] = name
+            elif isinstance(duplicates, str):
+                self.duplicates[duplicates] = name
 
     def generate(
         self,
@@ -62,11 +71,27 @@ class DataSynthesizer:
             pd.DataFrame: the generated dataset
         """
 
-        dataset = {sid: np.arange(start=1, stop=n + 1)}
-        for name, generator in self.generators.items():
-            dataset[name] = generator.generate(n, self.rng)
+        dataset = {}
+        # +sid
+        for copy in range(1, self.copies + 1, 1):
+            dataset[sid] = dataset.get(sid, []) + list(range(1, n + 1, 1))
+            dataset["copy"] = dataset.get("copy", []) + [copy] * n
 
-        for dup, name in self.duplicates.items():
-            dataset[dup] = dataset[name]
+        # +generator
+        for name, generator in self.generators.items():
+            if name in self.static:
+                dataset[name] = np.tile(generator.generate(n, self.rng), self.copies)
+            else:
+                for _ in range(self.copies):
+                    if isinstance(dataset.get(name), np.ndarray):
+                        dataset[name] = np.concatenate(
+                            [dataset[name], generator.generate(n, self.rng)], axis=0
+                        )
+                    else:
+                        dataset[name] = generator.generate(n, self.rng)
+
+        # +duplicates
+        for duplicate, value in self.duplicates.items():
+            dataset[duplicate] = dataset[value]
 
         return pd.DataFrame(dataset)
