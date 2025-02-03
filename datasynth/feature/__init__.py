@@ -7,6 +7,7 @@ from .beta import BetaDistributionGenerator
 from .binomial import BinomialDistributionGenerator
 from .choice import ChoiceDistributionGenerator
 from .exponential import ExponentialDistributionGenerator
+from .f import FDistributionGenerator
 from .gamma import GammaDistributionGenerator
 from .geometric import GeometricDistributionGenerator
 from .logistic import LogisticDistributionGenerator
