@@ -46,6 +46,7 @@ class WithdrawalRCTGenerator(RCTGenerator):
         self,
         n: int,
         sid: str = "subject_id",
+        sid_start: int = 0,
     ) -> pd.DataFrame:
         """Generate a DataFrame consisting columns that define the RCT design.
 
@@ -53,6 +54,7 @@ class WithdrawalRCTGenerator(RCTGenerator):
             n (int): number of subjects
             rng (np.random.Generator): the random number generator to use
             sid (str, optional): name of the subject id column. Defaults to "subject_id".
+            sid_start (int, optional): id number to start with, exclusive
 
         Returns:
             pd.DataFrame: the generated RCT design DataFrame
@@ -64,7 +66,7 @@ class WithdrawalRCTGenerator(RCTGenerator):
         # create the RCT design DataFrame
         data = {}
         for idx, assignment in enumerate(arm_assignments, 1):
-            data[sid] = data.get(sid, []) + [idx]
+            data[sid] = data.get(sid, []) + [sid_start + idx]
             for key, value in self.arms[assignment].items():
                 data[key] = data.get(key, []) + [value]
 

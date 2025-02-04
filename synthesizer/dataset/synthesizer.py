@@ -60,12 +60,14 @@ class DatasetSynthesizer:
         self,
         n: int,
         sid: str = "subject_id",
+        sid_start: int = 0,
     ) -> pd.DataFrame:
         """Generates a dataset of pd.DataFrame of size n.
 
         Args:
             n (int): size of the dataset
             sid (str, optional): name of the subject id column. Defaults to "subject_id".
+            sid_start (int, optional): id number to start with, exclusive
 
         Returns:
             pd.DataFrame: the generated dataset
@@ -74,7 +76,9 @@ class DatasetSynthesizer:
         dataset = {}
         # +sid
         for copy in range(1, self.copies + 1, 1):
-            dataset[sid] = dataset.get(sid, []) + list(range(1, n + 1, 1))
+            dataset[sid] = dataset.get(sid, []) + list(
+                range(sid_start + 1, sid_start + 1 + n, 1)
+            )
             dataset["copy"] = dataset.get("copy", []) + [copy] * n
 
         # +generator

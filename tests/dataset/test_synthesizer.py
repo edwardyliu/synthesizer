@@ -35,6 +35,7 @@ def test_synthesizer_duplicates():
 
     n = 100
     dataset = synthesizer.generate(n)
+    assert dataset["subject_id"].min() == 1
     assert len(dataset) == n
     assert len(dataset.columns) == 8
     assert "subject_id" in dataset.columns
@@ -48,6 +49,10 @@ def test_synthesizer_duplicates():
     assert "occupation_t3" in dataset.columns
     assert sum(dataset["occupation_t1"] == dataset["occupation_t2"]) == n
     assert sum(dataset["occupation_t2"] == dataset["occupation_t3"]) == n
+
+    dataset = synthesizer.generate(n, sid_start=n)
+    assert dataset["subject_id"].min() == n + 1
+    assert dataset["subject_id"].max() == n + n
 
 
 def test_synthesizer_copies():
