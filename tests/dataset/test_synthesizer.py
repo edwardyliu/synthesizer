@@ -58,9 +58,9 @@ def test_synthesizer_duplicates():
 def test_synthesizer_copies():
     """Test Unit: synthesizer.synthesizer"""
 
-    copies = 3
+    
     static = ["age", "occupation"]
-    synthesizer = DatasetSynthesizer(28, 3, static)
+    synthesizer = DatasetSynthesizer(28, static)
     synthesizer.add_feature("age", UniformIntegerDistributionGenerator(18, 65))
     synthesizer.add_feature(
         "occupation",
@@ -83,8 +83,9 @@ def test_synthesizer_copies():
     )
 
     n = 100
-    dataset = synthesizer.generate(n)
-    assert len(dataset) == copies * n
+    ncopies = 3
+    dataset = synthesizer.generate(n, ncopies=ncopies)
+    assert len(dataset) == ncopies * n
     assert len(dataset.columns) == 6
     assert "subject_id" in dataset.columns
     assert "copy" in dataset.columns

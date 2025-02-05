@@ -14,14 +14,12 @@ class DatasetSynthesizer:
     def __init__(
         self,
         seed: int = None,
-        copies: int = 1,
         static: List[str] = [],
     ):
         """Initializes the synthesizer with a random seed.
 
         Args:
             seed (int, optional): random seed for reproducibility. Defaults to None.
-            copies (Union[int, None], optional): number of copies per subject. Defaults to 1.
             static (Union[List[str], str], optional): columns to keep static per subject. Defaults to [].
         """
 
@@ -29,7 +27,6 @@ class DatasetSynthesizer:
         self.rng = np.random.default_rng(self.seed)
         self.generators: Dict[str, FeatureGenerator] = {}
         self.duplicates: Dict[str, str] = {}
-        self.copies = copies
         self.static: List[str] = static
 
     def add_feature(
@@ -61,6 +58,7 @@ class DatasetSynthesizer:
         n: int,
         sid: str = "subject_id",
         sid_start: int = 0,
+        ncopies: int = 1,
     ) -> pd.DataFrame:
         """Generates a dataset of pd.DataFrame of size n.
 
@@ -68,6 +66,7 @@ class DatasetSynthesizer:
             n (int): size of the dataset
             sid (str, optional): name of the subject id column. Defaults to "subject_id".
             sid_start (int, optional): id number to start with, exclusive
+            ncopies (int, optional): number of copies per subject. Defaults to 1.
 
         Returns:
             pd.DataFrame: the generated dataset
@@ -75,7 +74,7 @@ class DatasetSynthesizer:
 
         dataset = {}
         # +sid
-        for copy in range(1, self.copies + 1, 1):
+        for copy in range(1, ncopies + 1, 1):
             dataset[sid] = dataset.get(sid, []) + list(
                 range(sid_start + 1, sid_start + 1 + n, 1)
             )
@@ -84,9 +83,9 @@ class DatasetSynthesizer:
         # +generator
         for name, generator in self.generators.items():
             if name in self.static:
-                dataset[name] = np.tile(generator.generate(n, self.rng), self.copies)
+                dataset[name] = np.tile(generator.generate(n, self.rng), ncopies)
             else:
-                for _ in range(self.copies):
+                for _ in range(ncopies):
                     if isinstance(dataset.get(name), np.ndarray):
                         dataset[name] = np.concatenate(
                             [dataset[name], generator.generate(n, self.rng)], axis=0
