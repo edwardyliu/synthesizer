@@ -13,14 +13,14 @@ class WithdrawalRCTGenerator(RCTGenerator):
     def __init__(
         self,
         seed: int = None,
-        success: float = 0.3,
+        response: float = 0.3,
         withdrawal: float = 0.5,
         **kwargs,
     ):
         """Initializes the generator."""
 
         self.rng = np.random.default_rng(seed)
-        self.success = success
+        self.response = response
         self.withdrawal = withdrawal
 
         # generate all possible arms
@@ -60,30 +60,36 @@ class WithdrawalRCTGenerator(RCTGenerator):
             pd.DataFrame: the generated RCT design DataFrame
         """
 
-        # randomly assign subjects to an arm
-        arm_assignments = self.rng.integers(low=0, high=len(self.arms), size=n)
-
-        # create the RCT design DataFrame
         data = {}
-        for idx, assignment in enumerate(arm_assignments, 1):
-            data[sid] = data.get(sid, []) + [sid_start + idx]
-            for key, value in self.arms[assignment].items():
-                data[key] = data.get(key, []) + [value]
 
         # simulate response
-        responses = self.rng.binomial(n=1, p=self.success, size=n)
+        responses = self.rng.binomial(n=1, p=self.response, size=n)
         data["response"] = [True if response == 1 else False for response in responses]
 
-        # simulate withdrawal
-        # randomize responders to continue or to withdraw
-        withdrawals = []
+        # simulate withdrawal status
+        # i.e. randomize responders to continue or to withdraw
+        # continue: True
+        # withdraw: False
+        # not responder: None
+        statuses = []
         for response in responses:
             if response:
-                withdrawals.append(
-                    True if self.rng.binomial(n=1, p=self.withdrawal) == 1 else False
+                statuses.append(
+                    False if self.rng.binomial(n=1, p=self.withdrawal) == 1 else True
                 )
             else:
-                withdrawals.append(None)
-        data["withdrawal"] = withdrawals
+                statuses.append(None)
+        data["status"] = statuses
+
+        # randomly assign subjects to an arm
+        for idx, status in enumerate(statuses, 1):
+            data[sid] = data.get(sid, []) + [sid_start + idx]
+            if status:
+                arm_assignment = self.rng.integers(low=0, high=len(self.arms))
+                for key, value in self.arms[arm_assignment].items():
+                    data[key] = data.get(key, []) + [value]
+            else:
+                for key in self.arms[0].keys():
+                    data[key] = data.get(key, []) + [None]
 
         return pd.DataFrame(data)
