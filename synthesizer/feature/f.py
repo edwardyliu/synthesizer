@@ -18,6 +18,8 @@ class FDistributionGenerator(FeatureGenerator):
         ceil: Union[bool, None] = None,
         floor: Union[bool, None] = None,
         decimals: Union[int, None] = None,
+        min: Union[float, None] = None,
+        max: Union[float, None] = None,
     ):
         """Initializes the generator.
 
@@ -27,6 +29,8 @@ class FDistributionGenerator(FeatureGenerator):
             ceil (Union[bool, None], optional): whether to ceil the values. Defaults to None.
             floor (Union[bool, None], optional): whether to floor the values. Defaults to None.
             decimals (Union[int, None], optional): number of decimal places to round to. Defaults to None.
+            min (Union[float, None], optional): minimum value of the feature. Defaults to None.
+            max (Union[float, None], optional): maximum value of the feature. Defaults to None.
         """
         self.dfnum = dfnum
         self.dfden = dfden
@@ -34,6 +38,8 @@ class FDistributionGenerator(FeatureGenerator):
         self.ceil = ceil
         self.floor = floor
         self.decimals = decimals
+        self.min = min
+        self.max = max
 
     def generate(self, n: int, rng: np.random.Generator) -> np.ndarray:
         """Generates n samples of feature via the given random number generator.
@@ -48,10 +54,15 @@ class FDistributionGenerator(FeatureGenerator):
 
         f = rng.f(dfnum=self.dfnum, dfden=self.dfden, size=n)
         if self.ceil:
-            return np.ceil(f)
+            f = np.ceil(f)
         elif self.floor:
-            return np.floor(f)
+            f = np.floor(f)
         elif self.decimals:
-            return np.around(f, decimals=self.decimals)
-        else:
-            return f
+            f = np.around(f, decimals=self.decimals)
+
+        if self.min is not None:
+            f = np.maximum(f, self.min)
+        if self.max is not None:
+            f = np.minimum(f, self.max)
+
+        return f

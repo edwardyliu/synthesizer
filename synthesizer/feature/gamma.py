@@ -18,6 +18,8 @@ class GammaDistributionGenerator(FeatureGenerator):
         ceil: Union[bool, None] = None,
         floor: Union[bool, None] = None,
         decimals: Union[int, None] = None,
+        min: Union[float, None] = None,
+        max: Union[float, None] = None,
     ):
         """Initializes the generator.
 
@@ -27,6 +29,8 @@ class GammaDistributionGenerator(FeatureGenerator):
             ceil (Union[bool, None], optional): whether to ceil the values. Defaults to None.
             floor (Union[bool, None], optional): whether to floor the values. Defaults to None.
             decimals (Union[int, None], optional): number of decimal places to round to. Defaults to None.
+            min (Union[float, None], optional): minimum value of the feature. Defaults to None.
+            max (Union[float, None], optional): maximum value of the feature. Defaults to None.
         """
         self.shape = shape
         self.scale = scale
@@ -34,6 +38,8 @@ class GammaDistributionGenerator(FeatureGenerator):
         self.ceil = ceil
         self.floor = floor
         self.decimals = decimals
+        self.min = min
+        self.max = max
 
     def generate(self, n: int, rng: np.random.Generator) -> np.ndarray:
         """Generates n samples of feature via the given random number generator.
@@ -48,10 +54,15 @@ class GammaDistributionGenerator(FeatureGenerator):
 
         gamma = rng.gamma(shape=self.shape, scale=self.scale, size=n)
         if self.ceil:
-            return np.ceil(gamma)
+            gamma = np.ceil(gamma)
         elif self.floor:
-            return np.floor(gamma)
+            gamma = np.floor(gamma)
         elif self.decimals:
-            return np.around(gamma, decimals=self.decimals)
-        else:
-            return gamma
+            gamma = np.around(gamma, decimals=self.decimals)
+
+        if self.min is not None:
+            gamma = np.maximum(gamma, self.min)
+        if self.max is not None:
+            gamma = np.minimum(gamma, self.max)
+
+        return gamma

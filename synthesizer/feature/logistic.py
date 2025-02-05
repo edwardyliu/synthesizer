@@ -18,6 +18,8 @@ class LogisticDistributionGenerator(FeatureGenerator):
         ceil: Union[bool, None] = None,
         floor: Union[bool, None] = None,
         decimals: Union[int, None] = None,
+        min: Union[float, None] = None,
+        max: Union[float, None] = None,
     ):
         """Initializes the generator.
 
@@ -27,6 +29,8 @@ class LogisticDistributionGenerator(FeatureGenerator):
             ceil (Union[bool, None], optional): whether to ceil the values. Defaults to None.
             floor (Union[bool, None], optional): whether to floor the values. Defaults to None.
             decimals (Union[int, None], optional): number of decimal places to round to. Defaults to None.
+            min (Union[float, None], optional): minimum value of the feature. Defaults to None.
+            max (Union[float, None], optional): maximum value of the feature. Defaults to None.
         """
         self.mean = mean
         self.scale = scale
@@ -34,6 +38,8 @@ class LogisticDistributionGenerator(FeatureGenerator):
         self.ceil = ceil
         self.floor = floor
         self.decimals = decimals
+        self.min = min
+        self.max = max
 
     def generate(self, n: int, rng: np.random.Generator) -> np.ndarray:
         """Generates n samples of feature via the given random number generator.
@@ -48,10 +54,15 @@ class LogisticDistributionGenerator(FeatureGenerator):
 
         logistic = rng.logistic(loc=self.mean, scale=self.scale, size=n)
         if self.ceil:
-            return np.ceil(logistic)
+            logistic = np.ceil(logistic)
         elif self.floor:
-            return np.floor(logistic)
+            logistic = np.floor(logistic)
         elif self.decimals:
-            return np.around(logistic, decimals=self.decimals)
-        else:
-            return logistic
+            logistic = np.around(logistic, decimals=self.decimals)
+
+        if self.min is not None:
+            logistic = np.maximum(logistic, self.min)
+        if self.max is not None:
+            logistic = np.minimum(logistic, self.max)
+
+        return logistic

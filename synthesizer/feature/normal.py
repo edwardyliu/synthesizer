@@ -18,6 +18,8 @@ class NormalDistributionGenerator(FeatureGenerator):
         ceil: Union[bool, None] = None,
         floor: Union[bool, None] = None,
         decimals: Union[int, None] = None,
+        min: Union[float, None] = None,
+        max: Union[float, None] = None,
     ):
         """Initializes the generator.
 
@@ -27,6 +29,8 @@ class NormalDistributionGenerator(FeatureGenerator):
             ceil (Union[bool, None], optional): whether to ceil the values. Defaults to None.
             floor (Union[bool, None], optional): whether to floor the values. Defaults to None.
             decimals (Union[int, None], optional): number of decimal places to round to. Defaults to None.
+            min (Union[float, None], optional): minimum value of the feature. Defaults to None.
+            max (Union[float, None], optional): maximum value of the feature. Defaults to None.
         """
         self.mean = mean
         self.std = std
@@ -34,6 +38,8 @@ class NormalDistributionGenerator(FeatureGenerator):
         self.ceil = ceil
         self.floor = floor
         self.decimals = decimals
+        self.min = min
+        self.max = max
 
     def generate(self, n: int, rng: np.random.Generator) -> np.ndarray:
         """Generates n samples of feature via the given random number generator.
@@ -48,10 +54,15 @@ class NormalDistributionGenerator(FeatureGenerator):
 
         normal = rng.normal(loc=self.mean, scale=self.std, size=n)
         if self.ceil:
-            return np.ceil(normal)
+            normal = np.ceil(normal)
         elif self.floor:
-            return np.floor(normal)
+            normal = np.floor(normal)
         elif self.decimals:
-            return np.around(normal, decimals=self.decimals)
-        else:
-            return normal
+            normal = np.around(normal, decimals=self.decimals)
+
+        if self.min is not None:
+            normal = np.maximum(normal, self.min)
+        if self.max is not None:
+            normal = np.minimum(normal, self.max)
+
+        return normal

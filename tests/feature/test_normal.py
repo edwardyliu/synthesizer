@@ -18,3 +18,8 @@ def test_normal():
 
     assert np.isclose(np.mean(feature), mean, atol=0.1)
     assert np.isclose(np.std(feature), std, atol=0.1)
+    assert np.min(feature) < 0
+
+    generator = NormalDistributionGenerator(mean, std, min=0)
+    feature = generator.generate(n, rng)
+    assert np.min(feature) == 0
