@@ -25,26 +25,27 @@ class DatasetSynthesizer:
 
         self.seed = seed
         self.rng = np.random.default_rng(self.seed)
-        self.generators: Dict[str, FeatureGenerator] = {}
+        self.generators: Dict[str, List[FeatureGenerator]] = {}
         self.duplicates: Dict[str, str] = {}
         self.static: List[str] = static
 
     def add_feature(
         self,
         name: str,
-        generator: Union[FeatureGenerator, None] = None,
+        generators: Union[List[FeatureGenerator], FeatureGenerator],
         duplicates: Union[List[str], str, None] = None,
     ):
         """Adds a feature generator to the synthesizer.
 
         Args:
             name (str): name of the feature
-            generator (FeatureGenerator): the feature generator. Defaults to None.
+            generators (Union[List[FeatureGenerator], FeatureGenerator): the feature generators.
             duplicates (Union[List[str], str], optional): columns to duplicate this feature. Defaults to None.
         """
 
-        if generator:
-            self.generators[name] = generator
+        if isinstance(generators, FeatureGenerator):
+            generators = [generators]
+        self.generators[name] = generators
 
         if duplicates:
             if isinstance(duplicates, list):
@@ -80,18 +81,27 @@ class DatasetSynthesizer:
             )
             dataset["copy"] = dataset.get("copy", []) + [copy] * n
 
+        def _generate(size: int, generators: List[FeatureGenerator]) -> np.ndarray:
+            values = []
+            for _ in range(size):
+                choice = self.rng.integers(low=0, high=len(generators))
+                generator = generators[choice]
+                value = generator.generate(1, self.rng)
+                values.append(value)
+            return np.concatenate(values, axis=0)
+
         # +generator
-        for name, generator in self.generators.items():
+        for name, generators in self.generators.items():
             if name in self.static:
-                dataset[name] = np.tile(generator.generate(n, self.rng), ncopies)
+                subset = _generate(n, generators)
+                dataset[name] = np.tile(subset, ncopies)
             else:
                 for _ in range(ncopies):
+                    subset = _generate(n, generators)
                     if isinstance(dataset.get(name), np.ndarray):
-                        dataset[name] = np.concatenate(
-                            [dataset[name], generator.generate(n, self.rng)], axis=0
-                        )
+                        dataset[name] = np.concatenate([dataset[name], subset], axis=0)
                     else:
-                        dataset[name] = generator.generate(n, self.rng)
+                        dataset[name] = subset
 
         # +duplicates
         for duplicate, value in self.duplicates.items():
