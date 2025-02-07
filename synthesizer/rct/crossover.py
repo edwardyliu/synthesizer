@@ -41,7 +41,6 @@ class CrossoverRCTGenerator(RCTGenerator):
 
         Args:
             n (int): number of subjects
-            rng (np.random.Generator): the random number generator to use
             sid (str, optional): name of the subject id column. Defaults to "subject_id".
             sid_start (int, optional): id number to start with, exclusive
 

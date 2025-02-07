@@ -1,10 +1,12 @@
 # synthesizer/rct/generator.py
 """Base class for RCT generation."""
 
+from typing import Dict, Union
 from abc import ABC, abstractmethod
 
-import numpy as np
 import pandas as pd
+
+from synthesizer.util import Filters
 
 
 class RCTGenerator(ABC):
@@ -14,7 +16,6 @@ class RCTGenerator(ABC):
     def generate(
         self,
         n: int,
-        rng: np.random.Generator,
         sid: str = "subject_id",
         sid_start: int = 0,
     ) -> pd.DataFrame:
@@ -22,9 +23,30 @@ class RCTGenerator(ABC):
 
         Args:
             n (int): number of subjects
-            rng (np.random.Generator): the random number generator to use
             sid (str, optional): name of the subject id column. Defaults to "subject_id".
             sid_start (int, optional): id number to start with, exclusive
+
+        Returns:
+            pd.DataFrame: the generated RCT design DataFrame
+        """
+
+
+class RCTGeneratorGrouped(RCTGenerator):
+    """Abstract class for grouped RCT generation."""
+
+    @abstractmethod
+    def generate(
+        self,
+        subjects: pd.DataFrame,
+        groupings: Dict[str, Filters],
+        sid: str = "subject_id",
+    ) -> pd.DataFrame:
+        """Generate a DataFrame consisting columns that define the RCT design.
+
+        Args:
+            subjects (pd.DataFrame): DataFrame of subjects
+            groupings (List[Filters]): list of groupings and their associated filters
+            sid (str, optional): name of the subject id column. Defaults to "subject_id".
 
         Returns:
             pd.DataFrame: the generated RCT design DataFrame
