@@ -1,4 +1,4 @@
-# synthesizer/driver/parallel.py
+# synthesizer/example/withdrawal.py
 
 import logging
 
@@ -11,11 +11,11 @@ from synthesizer.feature import (
     NormalDistributionGenerator,
     UniformIntegerDistributionGenerator,
 )
-from synthesizer.rct import ParallelRCTGenerator
+from synthesizer.rct import WithdrawalRCTGenerator
 
 
 def main():
-    logger.info("synthesizer.driver.parallel.main: generating dataset")
+    logger.info("synthesizer.example.withdrawal.main: generating dataset")
 
     # build data synthesizer
     synthesizer = DatasetSynthesizer()
@@ -40,7 +40,11 @@ def main():
         "discount": ["placebo", "20", "40"],
         "time": ["placebo", "40", "20"],
     }
-    rct = ParallelRCTGenerator(**treatments)
+    rct = WithdrawalRCTGenerator(**treatments)
+    rct.arms = [
+        {"discount": "20", "time": "placebo"},
+        {"discount": "40", "time": "placebo"},
+    ]
 
     # generate dataset and design for <n> subjects
     n = 100
@@ -54,7 +58,7 @@ def main():
     assert len(design) == n
 
     dataframe = design.join(dataset, on="subject_id")
-    dataframe.to_csv("parallel.csv", index=True)
+    dataframe.to_csv("withdrawal.csv", index=True)
 
 
 if __name__ == "__main__":

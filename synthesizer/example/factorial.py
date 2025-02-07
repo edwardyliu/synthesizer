@@ -1,4 +1,4 @@
-# synthesizer/driver/withdrawal.py
+# synthesizer/example/factorial.py
 
 import logging
 
@@ -11,11 +11,11 @@ from synthesizer.feature import (
     NormalDistributionGenerator,
     UniformIntegerDistributionGenerator,
 )
-from synthesizer.rct import WithdrawalRCTGenerator
+from synthesizer.rct import FactorialRCTGenerator
 
 
 def main():
-    logger.info("synthesizer.driver.withdrawal.main: generating dataset")
+    logger.info("synthesizer.example.factorial.main: generating dataset")
 
     # build data synthesizer
     synthesizer = DatasetSynthesizer()
@@ -40,11 +40,7 @@ def main():
         "discount": ["placebo", "20", "40"],
         "time": ["placebo", "40", "20"],
     }
-    rct = WithdrawalRCTGenerator(**treatments)
-    rct.arms = [
-        {"discount": "20", "time": "placebo"},
-        {"discount": "40", "time": "placebo"},
-    ]
+    rct = FactorialRCTGenerator(**treatments)
 
     # generate dataset and design for <n> subjects
     n = 100
@@ -58,7 +54,7 @@ def main():
     assert len(design) == n
 
     dataframe = design.join(dataset, on="subject_id")
-    dataframe.to_csv("withdrawal.csv", index=True)
+    dataframe.to_csv("factorial.csv", index=True)
 
 
 if __name__ == "__main__":

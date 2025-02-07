@@ -1,4 +1,4 @@
-# synthesizer/driver/crossover.py
+# synthesizer/example/crossover.py
 
 import logging
 
@@ -15,7 +15,7 @@ from synthesizer.rct import CrossoverRCTGenerator
 
 
 def main():
-    logger.info("synthesizer.driver.crossover.main: generating dataset")
+    logger.info("synthesizer.example.crossover.main: generating dataset")
 
     # build data synthesizer
 

@@ -1,4 +1,4 @@
-# synthesizer/driver/factorial.py
+# synthesizer/example/parallel.py
 
 import logging
 
@@ -11,11 +11,11 @@ from synthesizer.feature import (
     NormalDistributionGenerator,
     UniformIntegerDistributionGenerator,
 )
-from synthesizer.rct import FactorialRCTGenerator
+from synthesizer.rct import ParallelRCTGenerator
 
 
 def main():
-    logger.info("synthesizer.driver.factorial.main: generating dataset")
+    logger.info("synthesizer.example.parallel.main: generating dataset")
 
     # build data synthesizer
     synthesizer = DatasetSynthesizer()
@@ -40,7 +40,7 @@ def main():
         "discount": ["placebo", "20", "40"],
         "time": ["placebo", "40", "20"],
     }
-    rct = FactorialRCTGenerator(**treatments)
+    rct = ParallelRCTGenerator(**treatments)
 
     # generate dataset and design for <n> subjects
     n = 100
@@ -54,7 +54,7 @@ def main():
     assert len(design) == n
 
     dataframe = design.join(dataset, on="subject_id")
-    dataframe.to_csv("factorial.csv", index=True)
+    dataframe.to_csv("parallel.csv", index=True)
 
 
 if __name__ == "__main__":
