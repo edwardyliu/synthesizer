@@ -16,6 +16,5 @@ from .poisson import PoissonDistributionGenerator
 from .t import TDistributionGenerator
 from .uniform import UniformDistributionGenerator, UniformIntegerDistributionGenerator
 
-
 logger = logging.getLogger("synthesizer")
 logger.info("synthesizer.feature: initialized.")
