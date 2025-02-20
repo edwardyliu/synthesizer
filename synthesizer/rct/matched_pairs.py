@@ -74,4 +74,10 @@ class MatchedPairsRCTGenerator(RCTGeneratorGrouped):
                 for key, value in self.arms[assignment].items():
                     data[key] = data.get(key, []) + [value]
 
+                # for each column in DataFrame subjects, populate to data
+                # except sid
+                for col in subgroup.columns:
+                    if col != sid:
+                        data[col] = data.get(col, []) + [subgroup.iloc[idx][col]]
+
         return pd.DataFrame(data)

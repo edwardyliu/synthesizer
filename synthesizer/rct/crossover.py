@@ -62,7 +62,8 @@ class CrossoverRCTGenerator(RCTGenerator):
                 for key, value in arm.items():
                     data[key] = data.get(key, []) + [value]
 
-                # for each column in DataFrame block, populate to data
+                # for each column in DataFrame subjects, populate to data
+                # except sid
                 for col in subjects.columns:
                     if col != sid:
                         data[col] = data.get(col, []) + [subjects.iloc[idx][col]]

@@ -44,16 +44,14 @@ class WithdrawalRCTGenerator(RCTGenerator):
 
     def generate(
         self,
-        n: int,
+        subjects: pd.DataFrame,
         sid: str = "subject_id",
-        sid_start: int = 0,
     ) -> pd.DataFrame:
         """Generate a DataFrame consisting columns that define the RCT design.
 
         Args:
-            n (int): number of subjects
+            subjects (pd.DataFrame): DataFrame of subjects
             sid (str, optional): name of the subject id column. Defaults to "subject_id".
-            sid_start (int, optional): id number to start with, exclusive
 
         Returns:
             pd.DataFrame: the generated RCT design DataFrame
@@ -62,7 +60,7 @@ class WithdrawalRCTGenerator(RCTGenerator):
         data = {}
 
         # simulate response
-        responses = self.rng.binomial(n=1, p=self.response, size=n)
+        responses = self.rng.binomial(n=1, p=self.response, size=len(subjects))
         data["response"] = [True if response == 1 else False for response in responses]
 
         # simulate withdrawal status
@@ -81,8 +79,8 @@ class WithdrawalRCTGenerator(RCTGenerator):
         data["status"] = statuses
 
         # randomly assign subjects to an arm
-        for idx, status in enumerate(statuses, 1):
-            data[sid] = data.get(sid, []) + [sid_start + idx]
+        for idx, status in enumerate(statuses):
+            data[sid] = data.get(sid, []) + [subjects.iloc[idx][sid]]
             if status:
                 arm_assignment = self.rng.integers(low=0, high=len(self.arms))
                 for key, value in self.arms[arm_assignment].items():
@@ -90,5 +88,11 @@ class WithdrawalRCTGenerator(RCTGenerator):
             else:
                 for key in self.arms[0].keys():
                     data[key] = data.get(key, []) + [None]
+
+            # for each column in DataFrame subjects, populate to data
+            # except sid
+            for col in subjects.columns:
+                if col != sid:
+                    data[col] = data.get(col, []) + [subjects.iloc[idx][col]]
 
         return pd.DataFrame(data)

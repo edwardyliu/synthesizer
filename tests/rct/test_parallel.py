@@ -1,5 +1,7 @@
 # Test: synthesizer/rct/parallel.py
 
+import pandas as pd
+
 from synthesizer.rct import ParallelRCTGenerator
 
 
@@ -16,5 +18,6 @@ def test_parallel():
         len(generator.arms) == len(treatments["discount"]) + len(treatments["time"]) - 1
     )
 
-    rct = generator.generate(n)
+    rct = generator.generate(pd.DataFrame({"subject_id": range(n), "age": range(n)}))
     assert len(rct) == n
+    assert len(rct.columns) == 4

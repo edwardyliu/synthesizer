@@ -23,29 +23,35 @@ class FactorialRCTGenerator(RCTGenerator):
 
     def generate(
         self,
-        n: int,
+        subjects: pd.DataFrame,
         sid: str = "subject_id",
-        sid_start: int = 0,
     ) -> pd.DataFrame:
         """Generate a DataFrame consisting columns that define the RCT design.
 
         Args:
-            n (int): number of subjects
+            subjects (pd.DataFrame): DataFrame of subjects
             sid (str, optional): name of the subject id column. Defaults to "subject_id".
-            sid_start (int, optional): id number to start with, exclusive
 
         Returns:
             pd.DataFrame: the generated RCT design DataFrame
         """
 
         # randomly assign subjects to an arm
-        arm_assignments = self.rng.integers(low=0, high=len(self.arms), size=n)
+        arm_assignments = self.rng.integers(
+            low=0, high=len(self.arms), size=len(subjects)
+        )
 
         # create the RCT design DataFrame
         data = {}
-        for idx, assignment in enumerate(arm_assignments, 1):
-            data[sid] = data.get(sid, []) + [sid_start + idx]
+        for idx, assignment in enumerate(arm_assignments):
+            data[sid] = data.get(sid, []) + [subjects.iloc[idx][sid]]
             for key, value in self.arms[assignment].items():
                 data[key] = data.get(key, []) + [value]
+
+            # for each column in DataFrame subjects, populate to data
+            # except sid
+            for col in subjects.columns:
+                if col != sid:
+                    data[col] = data.get(col, []) + [subjects.iloc[idx][col]]
 
         return pd.DataFrame(data)

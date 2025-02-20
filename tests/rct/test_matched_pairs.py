@@ -60,7 +60,7 @@ def test_matched_pairs():
         "time": ["placebo", "40"],
     }
     generator = MatchedPairsRCTGenerator(seed=42, **treatments)
-    rct = generator.generate(
+    experiment = generator.generate(
         subjects,
         {
             "GROUP_1": Filters([Filter("gender", "male"), Filter("age", 18, "__ge__")]),
@@ -69,6 +69,13 @@ def test_matched_pairs():
             ),
         },
     )
-    experiment = pd.merge(subjects, rct, on="subject_id")
+    # 4 columns for features
+    # 1 for copy
+    # 2 for treatments
+    # 1 for group
+    # 1 for sid
+    assert len(experiment.columns) == 4 + 1 + 2 + 1 + 1
     assert experiment[experiment["gender"] == "male"]["group"].unique() == "GROUP_1"
+    assert experiment[experiment["group"] == "GROUP_1"]["age"].min() >= 18
     assert experiment[experiment["gender"] == "female"]["group"].unique() == "GROUP_2"
+    assert experiment[experiment["group"] == "GROUP_2"]["age"].min() >= 18
