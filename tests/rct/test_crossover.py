@@ -18,5 +18,6 @@ def test_crossover():
     product = len(treatments["discount"]) * len(treatments["time"])
     assert len(generator.arms) == product
 
-    rct = generator.generate(pd.DataFrame({"subject_id": range(n)}))
+    rct = generator.generate(pd.DataFrame({"subject_id": range(n), "age": range(n)}))
     assert len(rct) == ncopies * n
+    assert len(rct.columns) == 5
