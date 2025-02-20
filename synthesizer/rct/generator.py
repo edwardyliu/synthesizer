@@ -9,7 +9,7 @@ import pandas as pd
 from synthesizer.util import Filters
 
 
-class RCTGenerator(ABC):
+class UnknownRCTGenerator(ABC):
     """Abstract class for RCT generation."""
 
     @abstractmethod
@@ -25,6 +25,26 @@ class RCTGenerator(ABC):
             n (int): number of subjects
             sid (str, optional): name of the subject id column. Defaults to "subject_id".
             sid_start (int, optional): id number to start with, exclusive
+
+        Returns:
+            pd.DataFrame: the generated RCT design DataFrame
+        """
+
+
+class RCTGenerator(ABC):
+    """Abstract class for RCT generation."""
+
+    @abstractmethod
+    def generate(
+        self,
+        subjects: pd.DataFrame,
+        sid: str = "subject_id",
+    ) -> pd.DataFrame:
+        """Generate a DataFrame consisting columns that define the RCT design.
+
+        Args:
+            subjects (pd.DataFrame): DataFrame of subjects
+            sid (str, optional): name of the subject id column. Defaults to "subject_id".
 
         Returns:
             pd.DataFrame: the generated RCT design DataFrame
