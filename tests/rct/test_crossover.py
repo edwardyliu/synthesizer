@@ -1,6 +1,6 @@
 # Test: synthesizer/rct/crossover.py
 
-import math
+import pandas as pd
 
 from synthesizer.rct import CrossoverRCTGenerator
 
@@ -18,5 +18,5 @@ def test_crossover():
     product = len(treatments["discount"]) * len(treatments["time"])
     assert len(generator.arms) == product
 
-    rct = generator.generate(n)
+    rct = generator.generate(pd.DataFrame({"subject_id": range(n)}))
     assert len(rct) == ncopies * n

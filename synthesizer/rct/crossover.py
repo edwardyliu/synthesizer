@@ -33,16 +33,14 @@ class CrossoverRCTGenerator(RCTGenerator):
 
     def generate(
         self,
-        n: int,
+        subjects: pd.DataFrame,
         sid: str = "subject_id",
-        sid_start: int = 0,
     ) -> pd.DataFrame:
         """Generate a DataFrame consisting columns that define the RCT design.
 
         Args:
-            n (int): number of subjects
+            subjects (pd.DataFrame): DataFrame of subjects
             sid (str, optional): name of the subject id column. Defaults to "subject_id".
-            sid_start (int, optional): id number to start with, exclusive
 
         Returns:
             pd.DataFrame: the generated RCT design DataFrame
@@ -52,14 +50,14 @@ class CrossoverRCTGenerator(RCTGenerator):
         arm_permutation_assignments = self.rng.integers(
             low=0,
             high=len(self.arm_combinations),
-            size=n,
+            size=len(subjects),
         )
 
         # create the RCT design DataFrame
         data = {}
-        for idx, assignment in enumerate(arm_permutation_assignments, 1):
+        for idx, assignment in enumerate(arm_permutation_assignments):
             for copy, arm in enumerate(self.arm_combinations[assignment], 1):
-                data[sid] = data.get(sid, []) + [sid_start + idx]
+                data[sid] = data.get(sid, []) + [subjects.iloc[idx][sid]]
                 data["copy"] = data.get("copy", []) + [copy]
                 for key, value in arm.items():
                     data[key] = data.get(key, []) + [value]
