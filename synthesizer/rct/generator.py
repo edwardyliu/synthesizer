@@ -1,7 +1,7 @@
 # synthesizer/rct/generator.py
 """Base class for RCT generation."""
 
-from typing import Dict, Union
+from typing import Dict
 from abc import ABC, abstractmethod
 
 import pandas as pd
@@ -45,7 +45,7 @@ class RCTGeneratorGrouped(RCTGenerator):
 
         Args:
             subjects (pd.DataFrame): DataFrame of subjects
-            groupings (List[Filters]): list of groupings and their associated filters
+            groupings (Dict[str, Filters]): list of groupings and their associated filters
             sid (str, optional): name of the subject id column. Defaults to "subject_id".
 
         Returns:

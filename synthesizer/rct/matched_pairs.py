@@ -48,7 +48,7 @@ class MatchedPairsRCTGenerator(RCTGeneratorGrouped):
 
         Args:
             subjects (pd.DataFrame): DataFrame of subjects
-            groupings (List[Filters]): list of groupings and their associated filters
+            groupings (Dict[str, Filters]): list of groupings and their associated filters
             sid (str, optional): name of the subject id column. Defaults to "subject_id".
 
         Returns:
